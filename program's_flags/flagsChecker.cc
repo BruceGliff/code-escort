@@ -2,11 +2,16 @@
 #include "errorDumper.h"
 #include <string>
 #include <iostream>
+#include <vector>
 
 
 class KeyWords
 {
-    std::map<std::string, std::pair<int, std::string>> Word; // < key, <value, disctoption> >
+    std::map<std::string, std::pair<int, std::string>> wordMap_; // < key_it, <value, disctoption_it> >
+    std::map<std::string, std::string> dictionary_;
+
+    void GetDictionary();
+    void GenerateKeys();
 
 public:
     KeyWords();
@@ -15,15 +20,31 @@ public:
 
     typedef std::map<std::string, std::pair<int, std::string>>::const_iterator const_iterator;
 
-    const_iterator begin() const { return Word.begin(); }
-    const_iterator end()   const { return Word.end();   }
+    const_iterator begin() const { return wordMap_.begin(); }
+    const_iterator end()   const { return wordMap_.end();   }
 };
 
+void KeyWords::GetDictionary()
+{
+    // TODO make read from file
+    dictionary_["-h"] = "Dump flags discription";                                  // help
+    dictionary_["-d"] = "flag example";                                            // flag example
+    dictionary_["-a"] = "flag example";                                            // flag example
+}
+
+void KeyWords::GenerateKeys()
+{
+    int y = 1;
+    for (auto && x : dictionary_)
+    {
+        wordMap_[x.first] = std::pair<int, std::string const &>{y, x.second};
+        y = y << 1;
+    }
+}
 KeyWords::KeyWords()
 {
-    Word["-h"] = std::pair<int, std::string>{0b1,       "Dump flags discription"};                                  // help
-    Word["-d"] = std::pair<int, std::string>{0b1,       "flag example"};                                            // flag example
-    Word["-a"] = std::pair<int, std::string>{0b1,       "flag example"};                                            // flag example
+    GetDictionary();
+    GenerateKeys();
 }
 
 namespace Dictionary
@@ -35,8 +56,8 @@ int ParseParam(char const * arg);
 
 int KeyWords::operator[](std::string const & word) const
 {
-    auto const Iter = Word.find(word);
-    if (Iter != Word.end())
+    auto const Iter = wordMap_.find(word);
+    if (Iter != wordMap_.end())
         return Iter->second.first;
     else
         return -1;
