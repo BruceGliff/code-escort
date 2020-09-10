@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++17
 LDFLAGS=
-SOURCES=main.cc ErrorProducer.cc FileProducer.cc FlagsChecker.cc
+SOURCES=main.cc errors_dumper/errorDumper.cc flags_checker/flagsChecker.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=program.out
 
@@ -15,4 +15,4 @@ $(EXECUTABLE): $(OBJECTS)
 
 
 clean: 
-	rm *.o *.out
+	rm -f */*.o */*.out *.o *.out

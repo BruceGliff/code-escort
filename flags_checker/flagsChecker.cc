@@ -1,5 +1,5 @@
 #include "FlagsChecker.h"
-#include "errorDumper.h"
+#include "../errors_dumper/errorDumper.h"
 #include <string>
 #include <iostream>
 #include <vector>
