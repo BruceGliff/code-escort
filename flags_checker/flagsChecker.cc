@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
+#include <fstream>
 
 class KeyWords
 {
@@ -27,9 +27,29 @@ public:
 void KeyWords::GetDictionary()
 {
     // TODO make read from file
+    std::ifstream DictionaryFile{"flags_checker/arguments.dic"};
+    if (!DictionaryFile.is_open())
+    {
+        errorDumper::ErrorDump("No file flags_checker/arhuments.dic");
+        return;
+    }
+
+    // read from file: -h disctription
+    std::string flag{};
+    std::string discr{};
+    while(DictionaryFile >> flag)
+    {
+        std::getline(DictionaryFile, discr);
+        dictionary_[flag] = discr;
+    }
+
+    DictionaryFile.close();
+    
+    /*
     dictionary_["-h"] = "Dump flags discription";                                  // help
     dictionary_["-d"] = "flag example";                                            // flag example
     dictionary_["-a"] = "flag example";                                            // flag example
+    */
 }
 
 void KeyWords::GenerateKeys()
